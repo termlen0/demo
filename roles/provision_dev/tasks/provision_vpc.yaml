@@ -1,0 +1,9 @@
+- name: ENSURE THE VPC(s) EXIST FOR SITE1
+  include_role:
+    name: provision_site1
+    tasks_from: provision_vpc.yaml
+
+- name: ENSURE THE VPC(s) EXIST FOR SITE2
+  include_role:
+    name: provision_site2
+    tasks_from: provision_vpc.yaml

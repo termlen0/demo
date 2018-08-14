@@ -1,0 +1,24 @@
+---
+- name: PROVISION A LAB ENVIRONMENT
+  hosts: localhost
+  connection: local
+  become: no
+  gather_facts: no
+  vars:
+    env: dev #options: dev, site1, site2
+
+  tasks:
+    - name: ENSURE A DIR EXISTS FOR STORING THE PEM
+      file:
+        path: "{{ playbook_dir }}/{{ec2_name_prefix}}"
+        state: directory
+
+    - name: ENSURE THE VPC(s) EXIST FOR "{{ env | upper }}"
+      include_role:
+        name: provision_{{ env | default('dev') }}
+        tasks_from: provision_vpc.yaml
+
+    - name: ENSURE THE ROUTER ELEMENTS EXIST FOR "{{ env | upper }}"
+      include_role:
+        name: provision_{{ env | default('dev') }}
+        tasks_from: provision_elements.yaml

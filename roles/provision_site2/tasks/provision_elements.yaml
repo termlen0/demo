@@ -1,0 +1,54 @@
+- name: FIND AMI FOR CSRs
+  ec2_ami_facts:
+    region: "{{ ec2_region }}"
+    owners: "{{ ec2_instance_types['csr-byol'].owners }}"
+    filters:
+      name: "{{ ec2_instance_types['csr-byol'].filter }}"
+      architecture: "{{ ec2_instance_types['csr-byol'].architecture }}"
+  register: amis
+
+- name: SAVE AMI FOR CSRs
+  set_fact:
+    csr_ami: >
+      {{ amis.images | selectattr('name', 'defined') | sort(attribute='creation_date') | last }}
+
+
+- name: CREATE EC2 INSTANCES FOR SITE{{ site }}
+  ec2:
+    assign_public_ip: yes
+    key_name: "{{ ec2_name_prefix }}-key"
+    group: "{{ ec2_security_group }}"
+    instance_type: "{{ ec2_instance_types['csr-byol'].size }}"
+    image: "{{ csr_ami.image_id }}"
+    region: "{{ ec2_region }}"
+    exact_count: 1
+    count_tag:
+      device  : "{{ec2_name_prefix}}-{{ item }}"
+      site: "site{{ site }}"
+    instance_tags:
+      location: "site{{ site }}"
+      device_name: "{{ item }}"
+      project: "{{ ec2_name_prefix }}"
+    wait: "{{ ec2_wait }}"
+    vpc_subnet_id: "{{ ec2_vpc_subnet_id }}"
+  register: rtr_output
+  with_items:
+    - "core{{ site }}"
+    - "remote{{ site }}"
+
+
+- name: GRAB ALL NETWORK INTERFACES FOR VPC
+  ec2_eni_facts:
+    region: "{{ ec2_region }}"
+    filters:
+      vpc-id: "{{ec2_vpc_id}}"
+  register: eni_facts
+
+
+- name: DISABLE SOURCE/DEST CHECK ON INSTANCE {{ec2_vpc_id}}
+  ec2_eni:
+    eni_id: "{{ item['network_interface_id'] }}"
+    region: "{{ ec2_region }}"
+    source_dest_check: false
+  with_items:
+    - "{{eni_facts['network_interfaces']}}"

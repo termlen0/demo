@@ -1,0 +1,5 @@
+---
+
+ec2_az: "{{ec2_region}}a"
+ec2_subnet: "172.16.0.0/16"
+site: 1
