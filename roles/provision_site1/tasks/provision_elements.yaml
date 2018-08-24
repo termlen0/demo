@@ -23,10 +23,12 @@
     region: "{{ ec2_region }}"
     exact_count: 1
     count_tag:
-      device: "{{ item }}"
+      uid: "{{ ec2_name_prefix }}_site{{ site }}-{{ item }}"
     instance_tags:
+      Name: "site{{ site }}-{{ item }}"
       location: "site{{ site }}"
       device : "{{ item }}"
+      uid: "{{ ec2_name_prefix }}_site{{ site }}-{{ item }}"
       project: "{{ ec2_name_prefix }}"
     wait: "{{ ec2_wait }}"
     vpc_subnet_id: "{{ ec2_vpc_subnet_id }}"

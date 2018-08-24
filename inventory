@@ -1,13 +1,4 @@
-[full]
-core1
-core2
-remote1
-remote2
+[dev:children]
+site1
+site2
 
-[site1]
-core1
-remote1
-
-[site2]
-core2
-remote2

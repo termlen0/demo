@@ -1,0 +1,5 @@
+- name: GATHER ROUTER DETAILS FOR {{ env | upper }}
+  include_tasks: gather_info.yaml
+
+- name: ADD ROUTERS TO GROUP {{ env | upper }}
+  include_tasks: add_to_group.yaml

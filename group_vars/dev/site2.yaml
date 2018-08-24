@@ -1,0 +1,11 @@
+s2:
+  remote_public_ip: 34.228.245.185
+  remote_private_ip: 172.16.179.0
+  remote_public_ip: 18.206.135.3
+  remote_private_ip: 172.17.42.159
+  core_public_ip: 34.230.2.78
+  core_private_ip: 172.16.244.76
+  core_public_ip: 54.236.240.223
+  core_private_ip: 172.17.195.100
+
+

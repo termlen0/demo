@@ -1,0 +1,5 @@
+- name: GATHER ROUTER DETAILS FOR SITE1
+  include_tasks: gather_site1_info.yaml
+
+- name: ADD ROUTERS TO GROUP SITE1
+  include_tasks: add_to_group_site1.yaml

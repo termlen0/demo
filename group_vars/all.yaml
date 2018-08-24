@@ -1,4 +1,4 @@
-ec2_name_prefix: NetDevops
+ec2_name_prefix: "{{ chg_num }}-{{ user_id }}"
 ec2_region: us-east-1
 ec2_wait: yes
 

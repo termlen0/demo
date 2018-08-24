@@ -1,0 +1,32 @@
+- name: GRAB FACTS FOR CORE1 NODE
+  ec2_instance_facts:
+    region: "{{ ec2_region }}"
+    filters:
+      instance-state-name: running
+      "tag:device": "core1"
+      "tag:location": "site1"
+      "tag:project": "{{ ec2_name_prefix }}"
+  register: core1_facts
+
+- name: GRAB FACTS FOR REMOTE1 NODE
+  ec2_instance_facts:
+    region: "{{ ec2_region }}"
+    filters:
+      instance-state-name: running
+      "tag:device": "remote1"
+      "tag:location": "site1"
+      "tag:project": "{{ ec2_name_prefix }}"
+  register: remote1_facts
+
+
+- name: BUILD SITE1 GROUP VARS
+  template:
+    src: generate_site1_vars.j2
+    dest: "{{ playbook_dir }}/group_vars/site1/plumbing.yaml"
+
+
+- name: BUILD DEV GROUP VARS
+  template:
+    src: generate_s1dev_vars.j2
+    dest: "{{ playbook_dir }}/group_vars/dev/site1.yaml"
+  when: "'dev' in env"

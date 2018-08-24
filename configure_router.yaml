@@ -1,0 +1,12 @@
+- name: PROVISION PLUMBING FOR {{ env | default('dev') | upper }}
+  hosts: "{{ env | default('dev') }}"
+  connection: network_cli
+  gather_facts: no
+
+  tasks:
+
+
+    - name: ENSURE TUNNEL INTERFACES EXISTS FOR REMOTE RTR
+      ios_config:
+        src: remote_tunnel.j2
+      when: "'remote' in inventory_hostname"

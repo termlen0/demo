@@ -1,0 +1,14 @@
+interface Tunnel0
+ ip address {{ site1.tunnel_network | ipaddr('1') | ipaddr('address') }} {{ site1.tunnel_network | ipaddr('netmask') }}
+ ip mtu {{ mtu }}
+ ip tcp adjust-mss {{ mss }}
+ tunnel source GigabitEthernet1
+ tunnel destination {{ s1.remote_public_ip }}
+
+
+interface Tunnel1
+ ip address {{ backbone.tunnel_network | ipaddr('1') | ipaddr('address') }} {{ backbone.tunnel_network | ipaddr('netmask') }}
+ ip mtu {{ mtu }}
+ ip tcp adjust-mss {{ mss }}
+ tunnel source GigabitEthernet1
+ tunnel destination {{ s2.core_public_ip }}

@@ -1,0 +1,5 @@
+- name: PLUMB UP SITE1
+  include_tasks: plumbing_site1.yaml
+
+- name: PLUMB UP SITE2
+  include_tasks: plumbing_site2.yaml

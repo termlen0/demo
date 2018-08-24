@@ -6,6 +6,8 @@
   gather_facts: no
   vars:
     env: dev #options: dev, site1, site2
+    chg_num: CHG001
+    user_id: ajay
 
   tasks:
     - name: ENSURE A DIR EXISTS FOR STORING THE PEM
@@ -22,3 +24,70 @@
       include_role:
         name: provision_{{ env | default('dev') }}
         tasks_from: provision_elements.yaml
+
+
+    - name: ENSURE THE PLUMBING EXISTS FOR "{{ env | upper }}"
+      include_role:
+        name: provision_plumbing
+        tasks_from: plumbing_{{ env | default('dev') }}.yaml
+
+
+
+- name: PROVISION PLUMBING FOR {{ env | default('dev') | upper }}
+  hosts: "{{ env | default('dev') }}"
+  connection: network_cli
+  gather_facts: no
+
+  vars:
+    env: dev
+
+  tasks:
+
+    - name: ENSURE THAT DEVICES ARE REACHABLE
+      include_role:
+        name: test_connectivity
+
+    - name: CONFIGURE DEVICES PER SITE
+      block:
+        - name: ENSURE TUNNEL INTERFACES EXISTS FOR REMOTE RTR
+          ios_config:
+            src: remote_tunnel.j2
+          when: "'remote' in inventory_hostname"
+
+
+        - name: ENSURE TUNNEL INTERFACES EXISTS FOR CORE RTR
+          ios_config:
+            src: core_tunnel.j2
+          when: "'core' in inventory_hostname"
+      when: "'dev' not in env"
+
+    - name: CONFIGURE ALL
+      block:
+
+        - name: ENSURE TUNNEL INTERFACES EXISTS FOR REMOTE 1 RTR
+          ios_config:
+            src: dev_s1remote.j2
+          when: "'remote1' in inventory_hostname"
+
+
+        - name: ENSURE TUNNEL INTERFACES EXISTS FOR REMOTE 2 RTR
+          ios_config:
+            src: dev_s2remote.j2
+          when: "'remote1' in inventory_hostname"
+
+
+        - name: ENSURE TUNNEL INTERFACES EXISTS FOR CORE1 RTR
+          ios_config:
+            src: dev_s1core.j2
+          when: "'core1' in inventory_hostname"
+
+        - name: ENSURE TUNNEL INTERFACES EXISTS FOR CORE2 RTR
+          ios_config:
+            src: dev_s2core.j2
+          when: "'core2' in inventory_hostname"
+
+        - name: ENSURE TUNNEL INTERFACES EXISTS FOR BACKBONE
+          ios_config:
+            src: "{{ inventory_hostname }}_backbone.j2"
+          when: "'core' in inventory_hostname"
+      when: "'dev' in env"

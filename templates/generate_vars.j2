@@ -1,0 +1,11 @@
+site1:
+{% for info in {{remote1_facts.instances %}
+  remote_public_ip: {{ info.public_ip_address }}
+  remote_private_ip: {{ info.private_ip_address }}
+{% endfor %}
+{% for info in core1_facts.instances %}
+  core_public_ip: {{ info.public_ip_address }}
+  core_private_ip: {{ info.private_ip_address }}
+{% endfor %}
+
+

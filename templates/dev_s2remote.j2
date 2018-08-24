@@ -1,0 +1,7 @@
+interface Tunnel0
+ ip address {{ site2.tunnel_network | ipaddr('2') | ipaddr('address') }} {{ site2.tunnel_network | ipaddr('netmask') }}
+ ip mtu {{ mtu }}
+ ip tcp adjust-mss {{ mss }}
+ tunnel source GigabitEthernet1
+ tunnel destination {{ s2.core_public_ip }}
+
