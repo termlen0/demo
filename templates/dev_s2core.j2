@@ -3,7 +3,7 @@ interface Tunnel0
  ip mtu {{ mtu }}
  ip tcp adjust-mss {{ mss }}
  tunnel source GigabitEthernet1
- tunnel destination {{ s1.remote_public_ip }}
+ tunnel destination {{ s2.remote_public_ip }}
 
 
 interface Tunnel1

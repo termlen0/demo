@@ -1,5 +1,5 @@
 interface Tunnel1
- ip address {{ backbone.tunnel_network | ipaddr('1') | ipaddr('address') }} {{ backbone.tunnel_network | ipaddr('netmask') }}
+ ip address {{ backbone.tunnel_network | ipaddr('2') | ipaddr('address') }} {{ backbone.tunnel_network | ipaddr('netmask') }}
  ip mtu {{ mtu }}
  ip tcp adjust-mss {{ mss }}
  tunnel source GigabitEthernet1

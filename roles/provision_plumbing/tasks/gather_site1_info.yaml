@@ -28,5 +28,5 @@
 - name: BUILD DEV GROUP VARS
   template:
     src: generate_s1dev_vars.j2
-    dest: "{{ playbook_dir }}/group_vars/dev/site1.yaml"
+    dest: "{{ playbook_dir }}/group_vars/dev/plumbing_site1.yaml"
   when: "'dev' in env"

@@ -1,25 +1,24 @@
 # Create the VPC, SG and subnets
-
-- name: CREATE AWS VPC {{ ec2_name_prefix }}-site{{ site }}
+- name: CREATE AWS VPC {{ ec2_name_prefix }}
   ec2_vpc_net:
-    name: "{{ ec2_name_prefix }}-site{{ site }}"
+    name: "{{ ec2_name_prefix }}-site"
     cidr_block: "{{ec2_subnet}}"
     region: "{{ ec2_region }}"
     tags:
-      Project: "NetDevOps - site{{ site }}"
+      Project: "NetDevOps - {{ ec2_name_prefix }} "
   register: create_vpc
   when: ec2_vpc_id is undefined
   until: create_vpc is not failed
   retries: 5
 
-- name: CREATE EC2 SECURITY GROUP FOR VPC NAMED {{ ec2_name_prefix }}-site{{ site }}
+- name: CREATE EC2 SECURITY GROUP FOR VPC NAMED {{ ec2_name_prefix }}
   ec2_group:
     name: "{{ ec2_name_prefix }}-insecure_all"
     description: all ports open
     region: "{{ ec2_region }}"
     vpc_id: "{{create_vpc.vpc.id}}"
     tags:
-      Project: "NetDevOps - site{{ site }}"
+      Project: "NetDevOps - {{ ec2_name_prefix }}"
     rules:
       - proto: 47
         to_port: -1
@@ -69,7 +68,7 @@
     cidr: "{{ ec2_subnet }}"
     wait_timeout: 600
     resource_tags:
-      Project: "NetDevOps - site{{ site }}"
+      Project: "NetDevOps - {{ ec2_name_prefix }}"
   register: create_subnet
   when: ec2_vpc_id is undefined
   until: create_subnet is not failed
@@ -80,7 +79,7 @@
     region: "{{ ec2_region }}"
     vpc_id: "{{ create_vpc.vpc.id }}"
     tags:
-      Project: "NetDevops - site{{ site }}"
+      Project: "NetDevops - {{ ec2_name_prefix }}"
   register: igw
   until: igw is not failed
   retries: 15
@@ -96,7 +95,7 @@
       - dest: 0.0.0.0/0
         gateway_id: "{{ igw.gateway_id }}"
     tags:
-      Project: "NetDevOps - site{{ site }}"
+      Project: "NetDevOps - {{ ec2_name_prefix }}"
   register: routetable
   until: routetable is not failed
   retries: 5

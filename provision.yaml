@@ -15,6 +15,11 @@
         path: "{{ playbook_dir }}/{{ec2_name_prefix}}"
         state: directory
 
+    - name: INITIALIZE GROUP VARS
+      file:
+        path: "{{ playbook_dir }}/{{ env }}/plumbing*.yaml"
+        state: absent
+
     - name: ENSURE THE VPC(s) EXIST FOR "{{ env | upper }}"
       include_role:
         name: provision_{{ env | default('dev') }}
@@ -32,6 +37,22 @@
         tasks_from: plumbing_{{ env | default('dev') }}.yaml
 
 
+- name: ENUSRE CONNECTIVITY
+  hosts: "{{ env | default('dev') }}"
+  connection: local
+  gather_facts: no
+
+  tasks:
+    - name: WAIT FOR SSH PORT TO BE REACHABLE
+      wait_for:
+        host: "{{ ansible_host }}"
+        port: 22
+        timeout: 300
+        connect_timeout: 10
+      ignore_errors: yes
+      delegate_to: localhost
+
+
 
 - name: PROVISION PLUMBING FOR {{ env | default('dev') | upper }}
   hosts: "{{ env | default('dev') }}"
@@ -43,9 +64,6 @@
 
   tasks:
 
-    - name: ENSURE THAT DEVICES ARE REACHABLE
-      include_role:
-        name: test_connectivity
 
     - name: CONFIGURE DEVICES PER SITE
       block:
@@ -73,7 +91,7 @@
         - name: ENSURE TUNNEL INTERFACES EXISTS FOR REMOTE 2 RTR
           ios_config:
             src: dev_s2remote.j2
-          when: "'remote1' in inventory_hostname"
+          when: "'remote2' in inventory_hostname"
 
 
         - name: ENSURE TUNNEL INTERFACES EXISTS FOR CORE1 RTR
@@ -86,8 +104,4 @@
             src: dev_s2core.j2
           when: "'core2' in inventory_hostname"
 
-        - name: ENSURE TUNNEL INTERFACES EXISTS FOR BACKBONE
-          ios_config:
-            src: "{{ inventory_hostname }}_backbone.j2"
-          when: "'core' in inventory_hostname"
       when: "'dev' in env"
