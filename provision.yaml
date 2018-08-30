@@ -6,8 +6,8 @@
   gather_facts: no
   vars:
     env: dev #options: dev, site1, site2
-    chg_num: CHG001
-    user_id: ajay
+    chg_num: DEMO
+    user_id: PROD
 
   tasks:
     - name: ENSURE A DIR EXISTS FOR STORING THE PEM
