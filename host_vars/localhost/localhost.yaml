@@ -1,0 +1,2 @@
+tower_pass: "{{ vault_pass }}"
+tower_user: "{{ vault_user }}"
