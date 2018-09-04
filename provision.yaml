@@ -105,3 +105,8 @@
           when: "'core2' in inventory_hostname"
 
       when: "'dev' in env"
+
+
+
+- name: ADD CREDENTIALS INTO TOWER
+  import_playbook: add_to_tower.yaml
