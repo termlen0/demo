@@ -12,9 +12,9 @@
   tasks:
     - name: ENSURE THAT ROUTER CREDENTIALS ARE IN TOWER
       tower_credential:
-        tower_host: "{{ tower_instance }}"
-        tower_password: "{{ tower_pass }}"
-        tower_username: "{{ tower_user }}"
+        # tower_host: "{{ tower_instance }}"
+        # tower_password: "{{ tower_pass }}"
+        # tower_username: "{{ tower_user }}"
         name: "{{ ec2_name_prefix }}"
         organization: "{{ org_name }}"
         kind: ssh
