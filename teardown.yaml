@@ -1,0 +1,16 @@
+---
+- name: DEPROVISION A LAB ENVIRONMENT
+  hosts: localhost
+  connection: local
+  become: no
+  gather_facts: no
+  vars:
+    env: dev #options: dev, site1, site2
+    chg_num: DEMO
+    user_id: PROD
+
+  tasks:
+    - name: ENSURE THE VPC(s) NO LONGER EXIST FOR "{{ env | upper }}"
+      include_role:
+        name: provision_{{ env | default('dev') }}
+        tasks_from: deprovision.yaml

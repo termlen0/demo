@@ -1,0 +1,9 @@
+- name: DEPROVISION SITE 1
+  include_role:
+    name: provision_site1
+    tasks_from: deprovision.yaml
+
+- name: DEPROVISION SITE2
+  include_role:
+    name: provision_site2
+    tasks_from: deprovision.yaml
