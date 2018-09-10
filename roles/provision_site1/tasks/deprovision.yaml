@@ -91,7 +91,7 @@
 
 - name: delete AWS VPC {{ ec2_name_prefix }}
   ec2_vpc_net:
-    name: "{{ ec2_name_prefix }}-vpc"
+    name: "{{ ec2_name_prefix }}-site"
     cidr_block: "{{ ec2_subnet }}"
     region: "{{ ec2_region }}"
     state: absent
