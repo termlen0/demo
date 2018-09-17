@@ -5,11 +5,13 @@
   become: no
   gather_facts: no
   vars:
-    env: dev #options: dev, site1, site2
+    env: dev #options: dev/full, site1, site2
     chg_num: DEMO
     user_id: PROD
 
   tasks:
+
+
     - name: ENSURE A DIR EXISTS FOR STORING THE PEM
       file:
         path: "{{ playbook_dir }}/{{ec2_name_prefix}}"

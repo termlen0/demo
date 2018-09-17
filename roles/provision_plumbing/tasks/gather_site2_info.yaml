@@ -30,4 +30,4 @@
   template:
     src: generate_s2dev_vars.j2
     dest: "{{ playbook_dir }}/group_vars/dev/plumbing_site2.yaml"
-  when: "'dev' in env"
+  when: "env == 'dev' or env == 'full' "

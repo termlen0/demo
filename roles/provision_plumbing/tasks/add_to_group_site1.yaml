@@ -11,6 +11,7 @@
     groups:
       - site1
       - dev
+      - full
   with_items:
     - "{{ core1_facts.instances }}"
     - "{{ remote1_facts.instances }}"
