@@ -79,7 +79,7 @@
           ios_config:
             src: core_tunnel.j2
           when: "'core' in inventory_hostname"
-      when: "'dev' not in env"
+      when: "env != 'dev' or env != 'full'"
 
     - name: CONFIGURE ALL
       block:
@@ -106,4 +106,4 @@
             src: dev_s2core.j2
           when: "'core2' in inventory_hostname"
 
-      when: "'dev' in env"
+      when: "env == 'dev' or env == 'full'"
